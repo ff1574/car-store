@@ -3,84 +3,86 @@ CREATE DATABASE IF NOT EXISTS cardatabase;
 USE cardatabase;
 
 DROP TABLE IF EXISTS manufacturers;
-CREATE TABLE manufacturers
+CREATE TABLE IF NOT EXISTS manufacturers
   (
-     manufacturerid INT auto_increment PRIMARY KEY,
-     name           VARCHAR(255) NOT NULL,
-     country        VARCHAR(100),
-     website        VARCHAR(255)
+     manufacturer_id        INT AUTO_INCREMENT  PRIMARY KEY,
+     manufacturer_name      VARCHAR(255)        NOT NULL,
+     manufacturer_country   VARCHAR(100),
+     manufacturer_website   VARCHAR(255)
   );
 
 DROP TABLE IF EXISTS cars;
-CREATE TABLE cars
+CREATE TABLE IF NOT EXISTS cars
   (
-     carid          INT auto_increment PRIMARY KEY,
-     manufacturerid INT,
-     model          VARCHAR(255) NOT NULL,
-     year           YEAR,
-     price          DECIMAL(10, 2),
-     color          VARCHAR(50),
-     enginetype     VARCHAR(100),
-     stockquantity  INT,
-     FOREIGN KEY (manufacturerid) REFERENCES manufacturers(manufacturerid)
+     car_id                 INT AUTO_INCREMENT  PRIMARY KEY,
+     manufacturer_id        INT,
+     car_model              VARCHAR(255)        NOT NULL,
+     car_year               YEAR,
+     car_price              DECIMAL(10, 2),
+     car_color              VARCHAR(50),
+     car_engine             VARCHAR(100),
+     car_stock_quantity     INT,
+
+     FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(manufacturer_id)
   );
 
 DROP TABLE IF EXISTS customers;
-CREATE TABLE customers
+CREATE TABLE IF NOT EXISTS customers
   (
-     customerid INT auto_increment PRIMARY KEY,
-     firstname  VARCHAR(255) NOT NULL,
-     lastname   VARCHAR(255) NOT NULL,
-     email      VARCHAR(255),
-     phone      VARCHAR(50),
-     address    TEXT
+     customer_id            INT AUTO_INCREMENT  PRIMARY KEY,
+     customer_name          VARCHAR(255)        NOT NULL,
+     customer_email         VARCHAR(255),
+     customer_phone         VARCHAR(50),
+     customer_address       TEXT
   );
 DROP TABLE IF EXISTS orders;
-CREATE TABLE orders
+CREATE TABLE IF NOT EXISTS orders
   (
-     orderid    INT auto_increment PRIMARY KEY,
-     customerid INT,
-     orderdate  DATE,
-     totalprice DECIMAL(10, 2) NULL,
-     FOREIGN KEY (customerid) REFERENCES customers(customerid)
+     order_id               INT AUTO_INCREMENT  PRIMARY KEY,
+     customer_id            INT,
+     order_date             DATE,
+     order_total            DECIMAL(10, 2)      NULL,
+
+     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
   );
 
-DROP TABLE IF EXISTS orderdetails;
-CREATE TABLE orderdetails
+DROP TABLE IF EXISTS order_details;
+CREATE TABLE IF NOT EXISTS order_details
   (
-     orderdetailid INT auto_increment PRIMARY KEY,
-     orderid       INT,
-     carid         INT,
-     quantity      INT,
-     priceperunit  DECIMAL(10, 2),
-     FOREIGN KEY (orderid) REFERENCES orders(orderid),
-     FOREIGN KEY (carid) REFERENCES cars(carid)
+     order_detail_id        INT AUTO_INCREMENT  PRIMARY KEY,
+     order_id               INT,
+     car_id                 INT,
+     car_quantity           INT,
+     car_price_per_unit     DECIMAL(10, 2),
+
+     FOREIGN KEY (order_id) REFERENCES orders(order_id),
+     FOREIGN KEY (car_id) REFERENCES cars(car_id)
   );
 
 -- Inserting into Manufacturers
-INSERT INTO Manufacturers (Name, Country, Website) VALUES
+INSERT INTO manufacturers (manufacturer_name, manufacturer_country, manufacturer_website) VALUES
 ('Tesla', 'USA', 'https://www.tesla.com'),
 ('Toyota', 'Japan', 'https://www.toyota.com'),
 ('BMW', 'Germany', 'https://www.bmw.com');
 
 -- Inserting into Cars
-INSERT INTO Cars (ManufacturerID, Model, Year, Price, Color, EngineType, StockQuantity) VALUES
+INSERT INTO cars (manufacturer_id, car_model, car_year, car_price, car_color, car_engine, car_stock_quantity) VALUES
 (1, 'Model S', 2022, 79990, 'Red', 'Electric', 5),
 (2, 'Corolla', 2021, 20000, 'Blue', 'Gasoline', 10),
-(3, 'X5', 2022, 58900, 'Black', 'Diesel', 4);
+(3, 'Model 3', 2022, 58900, 'Black', 'Diesel', 4);
 
 -- Inserting into Customers
-INSERT INTO Customers (FirstName, LastName, Email, Phone, Address) VALUES
-('John', 'Doe', 'johndoe@example.com', '555-0101', '123 Elm Street, Springfield'),
-('Jane', 'Smith', 'janesmith@example.com', '555-0102', '456 Oak Street, Metropolis');
+INSERT INTO customers (customer_name, customer_email, customer_phone, customer_address) VALUES
+('John Doe', 'johndoe@example.com', '555-0101', '123 Elm Street, Springfield'),
+('Jane Smith', 'janesmith@example.com', '555-0102', '456 Oak Street, Metropolis');
 
 -- Inserting into Orders
-INSERT INTO Orders (CustomerID, OrderDate, TotalPrice) VALUES
+INSERT INTO orders (customer_id, order_date, order_total) VALUES
 (1, '2023-03-24', 79990),
 (2, '2023-03-25', 20000);
 
 -- Inserting into OrderDetails
-INSERT INTO OrderDetails (OrderID, CarID, Quantity, PricePerUnit) VALUES
+INSERT INTO order_details (order_id, car_id, car_quantity, car_price_per_unit) VALUES
 (1, 1, 1, 79990),
 (2, 2, 1, 20000);
 
