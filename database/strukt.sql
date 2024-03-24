@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS customers
   (
      customer_id            INT AUTO_INCREMENT  PRIMARY KEY,
      customer_name          VARCHAR(255)        NOT NULL,
-     customer_email         VARCHAR(255),
+     customer_email         VARCHAR(255)		UNIQUE,
      customer_phone         VARCHAR(50),
      customer_address       TEXT
   );
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS orders
      customer_id            INT,
      order_date             DATE,
      order_total            DECIMAL(10, 2)      NULL,
+     order_status			ENUM('Completed', 'In Progress', 'Cancelled'),
 
      FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
   );
@@ -57,6 +58,15 @@ CREATE TABLE IF NOT EXISTS order_details
 
      FOREIGN KEY (order_id) REFERENCES orders(order_id),
      FOREIGN KEY (car_id) REFERENCES cars(car_id)
+  );
+  
+DROP TABLE IF EXISTS administrators;
+CREATE TABLE IF NOT EXISTS administrators
+  (
+     administrator_id       INT AUTO_INCREMENT  PRIMARY KEY,
+     administrator_name     VARCHAR(255)        NOT NULL,
+     administrator_email    VARCHAR(255)        NOT NULL UNIQUE,
+     administrator_password VARCHAR(255)        NOT NULL
   );
 
 -- Inserting into Manufacturers
@@ -85,4 +95,9 @@ INSERT INTO orders (customer_id, order_date, order_total) VALUES
 INSERT INTO order_details (order_id, car_id, car_quantity, car_price_per_unit) VALUES
 (1, 1, 1, 79990),
 (2, 2, 1, 20000);
+
+-- Inserting into Administrators
+INSERT INTO administrators (administrator_name, administrator_email, administrator_password) VALUES
+('Franko Fišter', 'ff1574@rit.edu', SHA2('admin', 256)),
+('Denny Lulak', 'dal4933@rit.edu', SHA2('admin', 256));
 
