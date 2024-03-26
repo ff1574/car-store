@@ -100,6 +100,7 @@ INSERT INTO order_details (order_id, car_id, car_quantity, car_price_per_unit) V
 INSERT INTO administrators (administrator_name, administrator_email, administrator_password) VALUES
 ('Franko Fišter', 'ff1574@rit.edu', SHA2('admin', 256)),
 ('Denny Lulak', 'dal4933@rit.edu', SHA2('admin', 256)),
-('Mladen Orsulic', 'mo4674@rit.edu', SHA2('admin', 256));
+('Mladen Orsulic', 'mo4674@rit.edu', SHA2('admin', 256)),
+('Dorian Dražić-Karalić', 'dd9349@rit.edu', SHA2('admin', 256));
 
 
