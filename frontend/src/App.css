@@ -1,0 +1,126 @@
+/* App.css */
+.manufacturer-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.manufacturer-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.manufacturer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.manufacturer-header h2 {
+  margin: 0;
+}
+
+.manufacturer-website {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.cars-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.cars-list li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.cars-list li:last-child {
+  border-bottom: none;
+}
+
+
+/* Add this to your App.css if not already present from the previous component styling */
+.car-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.car-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.car-details {
+  list-style-type: none;
+  padding: 0;
+}
+
+.car-details li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.car-details li:last-child {
+  border-bottom: none;
+}
+/* If creating a new style, it might look something like this */
+.customer-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.customer-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.customer-details {
+  list-style-type: none;
+  padding: 0;
+}
+
+.customer-details li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.customer-details li:last-child {
+  border-bottom: none;
+}
+/* Add or adjust styles in App.css */
+.order-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.order-details {
+  list-style-type: none;
+  padding: 0;
+}
+
+.order-details li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.order-details li:last-child {
+  border-bottom: none;
+}
