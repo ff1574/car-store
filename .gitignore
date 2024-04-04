@@ -99,3 +99,12 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# VS Code files
+.vscode/
+
+# Environment variables
+.env
+
+# Spring Boot
+target/
