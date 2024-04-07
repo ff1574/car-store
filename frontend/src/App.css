@@ -1,4 +1,5 @@
 /* App.css */
+
 .manufacturer-card {
   background-color: #f5f5f5;
   border-radius: 8px;
@@ -124,3 +125,123 @@
 .order-details li:last-child {
   border-bottom: none;
 }
+.manufacturer-background {
+  background-image: url('../public/background.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+  min-height: 100vh; 
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.7); 
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.manufacturer-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+}
+
+.manufacturer-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .manufacturer-header {
+    flex-direction: column;
+  }
+
+  .manufacturer-header h2 {
+    margin-bottom: 10px;
+  }
+}
+/* Center the header content vertically and horizontally */
+.manufacturer-header {
+  display: flex;
+  justify-content: space-between; /* This will place the h2 and a elements on opposite ends */
+  align-items: center; /* Vertically centers the items in the container */
+  flex-wrap: wrap; /* Allows items to wrap onto multiple lines */
+  margin-bottom: 20px;
+}
+
+.manufacturer-header h2 {
+  margin: 0;
+  flex-grow: 1; /* Allows the title to grow and the button to be pushed to the edge */
+}
+
+/* Style the website button and center it when there's room to grow */
+.manufacturer-website {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.3s;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 10px; 
+  white-space: nowrap; 
+}
+
+/* Hover effect for the button */
+.manufacturer-website:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjustments for smaller screens if needed */
+@media (max-width: 768px) {
+  .manufacturer-header {
+    justify-content: center; 
+  }
+
+  .manufacturer-website {
+    margin-top: 10px; 
+  }
+}
+/* Navbar link hover effect */
+.nav-link {
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-link:hover, .nav-link:focus {
+  color: #ffffff; 
+  background-color: #007bff; 
+}
+
+/* Active link styling */
+.nav-link.active {
+  color: #fff;
+  background-color: #0056b3;
+}
+/* Style for the navbar toggler on smaller screens */
+.navbar-toggler {
+  border-color: #fff; 
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+.navbar-brand {
+  color: #fff; 
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover, .navbar-brand:focus {
+  color: #ddd; 
+}
+
+
+
