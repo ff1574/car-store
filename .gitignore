@@ -108,6 +108,7 @@ $RECYCLE.BIN/
 
 # Spring Boot
 target/
+application.properties
 
 # React
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.

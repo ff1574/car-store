@@ -18,6 +18,10 @@ public class Manufacturer {
     @Column(nullable = false, length = 255)
     private String manufacturerName;
 
+    @Lob
+    @Column(name = "manufacturer_image")
+    private byte[] manufacturerImage;
+
     @Column(length = 100)
     private String manufacturerCountry;
 
