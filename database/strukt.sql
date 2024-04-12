@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS cars
      car_id                 INT AUTO_INCREMENT  PRIMARY KEY,
      manufacturer_id        INT,
      car_model              VARCHAR(255)        NOT NULL,
-     car_image 				MEDIUMBLOB,
+     car_image 				BLOB,
      car_year               YEAR,
      car_mileage			INT,
      car_price              DECIMAL(10, 2),
@@ -201,3 +201,5 @@ INSERT INTO administrators (administrator_name, administrator_email, administrat
 ('Mladen Oršulić', 'mo4674@rit.edu', SHA2('admin', 256)),
 ('Dorian Dražić-Karalić', 'dd9349@rit.edu', SHA2('admin', 256)),
 ('Branko Mihaljević', 'bxmcada@rit.edu', SHA2('charizard', 256));
+
+SELECT * FROM manufacturers;

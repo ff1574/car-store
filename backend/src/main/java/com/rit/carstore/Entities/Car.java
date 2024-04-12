@@ -30,6 +30,9 @@ public class Car {
     @Column(nullable = false)
     private Integer carYear;
 
+    @Column(nullable = false)
+    private Integer carMileage;
+
     @Column(precision = 10, scale = 2)
     private BigDecimal carPrice;
 

@@ -2,11 +2,12 @@ package com.rit.carstore.Controllers;
 
 import com.rit.carstore.Entities.Manufacturer;
 import com.rit.carstore.Services.ManufacturerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/manufacturer")

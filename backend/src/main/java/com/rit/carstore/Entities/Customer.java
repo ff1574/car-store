@@ -21,11 +21,11 @@ public class Customer {
     @Column(nullable = false, length = 255, unique = true)
     private String customerEmail;
 
+    @Column(nullable = false, length = 255)
+    private String customerPassword;
+
     @Column(length = 50)
     private String customerPhone;
-
-    @Lob
-    private String customerAddress;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
