@@ -1,4 +1,3 @@
-// ManufacturerComponent.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -40,6 +39,12 @@ function ManufacturerComponent() {
                 Website
               </a>
             </div>
+            {/* Display Manufacturer Image */}
+            <img
+              src={`data:image/png;base64,${manufacturer.manufacturerImage}`}
+              alt={manufacturer.manufacturerName}
+              style={{ width: "200px", height: "auto" }}
+            />
             <h3>Cars:</h3>
             <ul className="cars-list">
               {manufacturer.cars.map((car) => (

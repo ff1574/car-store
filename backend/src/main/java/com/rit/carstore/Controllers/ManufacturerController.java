@@ -64,7 +64,7 @@ public class ManufacturerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PatchMapping("/{id}/image")
+    @PutMapping("/{id}/image")
     public ResponseEntity<?> updateManufacturerImage(@PathVariable Integer id,
             @RequestParam("image") MultipartFile image) throws IOException {
         if (!image.isEmpty()) {

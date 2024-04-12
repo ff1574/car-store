@@ -203,4 +203,5 @@ INSERT INTO administrators (administrator_name, administrator_email, administrat
 ('Branko Mihaljević', 'bxmcada@rit.edu', SHA2('charizard', 256));
 
 SELECT * FROM manufacturers;
+DESCRIBE manufacturers;
 SHOW FIELDS FROM manufacturers WHERE Field = 'manufacturer_image';
