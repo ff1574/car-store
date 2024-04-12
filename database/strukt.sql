@@ -99,7 +99,6 @@ INSERT INTO manufacturers (manufacturer_name, manufacturer_country, manufacturer
 ('Fiat', 'Italy', 'https://www.fiat.com'),
 ('Renault', 'France', 'https://www.renault.com');
 
-
 -- Inserting into Cars
 -- Tesla
 INSERT INTO cars (manufacturer_id, car_model, car_year, car_price, car_color, car_engine, car_mileage, car_stock_quantity) VALUES
@@ -205,3 +204,8 @@ INSERT INTO administrators (administrator_name, administrator_email, administrat
 SELECT * FROM manufacturers;
 DESCRIBE manufacturers;
 SHOW FIELDS FROM manufacturers WHERE Field = 'manufacturer_image';
+SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = 1;
+
+SELECT manufacturer_id, HEX(manufacturer_image) AS image_hex FROM manufacturers;
+
+
