@@ -1,23 +1,25 @@
 // CarsComponent.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function CarsComponent() {
   const [cars, setCars] = useState([]);
+  const { manufacturerId } = useParams();
 
   useEffect(() => {
-    const fetchCars = async () => {
+    const fetchCarsByManufacturer = async () => {
       try {
-        // Update the URL to match your actual API endpoint for fetching cars
-        const response = await axios.get('http://localhost:8080/api/car');
-        setCars(response.data);
+        // Adjust the endpoint to include the manufacturerId to fetch cars for that manufacturer
+        const response = await axios.get(`http://localhost:8080/api/manufacturer/${manufacturerId}`);
+        setCars(response.data.cars); // Assuming the response structure includes a cars array
       } catch (error) {
-        console.error("Failed to fetch cars:", error);
+        console.error(`Failed to fetch cars for manufacturer ${manufacturerId}:`, error);
       }
     };
 
-    fetchCars();
-  }, []);
+    fetchCarsByManufacturer();
+  }, [manufacturerId]);
 
   return (
     <div>

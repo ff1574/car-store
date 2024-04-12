@@ -13,7 +13,6 @@ function NavbarComponent() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Manufacturers</Nav.Link>
-            <Nav.Link as={Link} to="/cars">Cars</Nav.Link>
             <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
             <Nav.Link as={Link} to="/customers">Customer</Nav.Link>
           </Nav>
