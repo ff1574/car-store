@@ -2,6 +2,9 @@ package com.rit.carstore.Services;
 
 import com.rit.carstore.Entities.Manufacturer;
 import com.rit.carstore.Repositories.ManufacturerRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +35,13 @@ public class ManufacturerService {
 
     public void deleteManufacturer(Integer id) {
         manufacturerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateManufacturerImage(Integer manufacturerId, byte[] imageBytes) {
+        manufacturerRepository.findById(manufacturerId).ifPresent(manufacturer -> {
+            manufacturer.setManufacturerImage(imageBytes);
+            manufacturerRepository.save(manufacturer);
+        });
     }
 }

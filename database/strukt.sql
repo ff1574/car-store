@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS manufacturers
   (
      manufacturer_id        INT AUTO_INCREMENT  PRIMARY KEY,
      manufacturer_name      VARCHAR(255)        NOT NULL,
-     manufacturer_image		MEDIUMBLOB,
+     manufacturer_image		BLOB,
      manufacturer_country   VARCHAR(100),
      manufacturer_website   VARCHAR(255)
   );
@@ -203,3 +203,4 @@ INSERT INTO administrators (administrator_name, administrator_email, administrat
 ('Branko Mihaljević', 'bxmcada@rit.edu', SHA2('charizard', 256));
 
 SELECT * FROM manufacturers;
+SHOW FIELDS FROM manufacturers WHERE Field = 'manufacturer_image';
