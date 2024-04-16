@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS cars
      car_stock_quantity     INT,
 
      FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(manufacturer_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 DROP TABLE IF EXISTS customers;
@@ -52,6 +53,7 @@ CREATE TABLE IF NOT EXISTS customer_addresses
     customer_country              	VARCHAR(100) NOT NULL,
     
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
   
 DROP TABLE IF EXISTS orders;
@@ -64,6 +66,7 @@ CREATE TABLE IF NOT EXISTS orders
      order_status			ENUM('Completed', 'In Progress', 'Cancelled'),
 
      FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 DROP TABLE IF EXISTS order_details;
@@ -75,8 +78,10 @@ CREATE TABLE IF NOT EXISTS order_details
      car_quantity           INT,
      car_price_per_unit     DECIMAL(10, 2),
 
-     FOREIGN KEY (order_id) REFERENCES orders(order_id),
-     FOREIGN KEY (car_id) REFERENCES cars(car_id)
+     FOREIGN KEY (order_id) REFERENCES orders(order_id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (car_id) REFERENCES cars(car_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
   );
   
 DROP TABLE IF EXISTS administrators;

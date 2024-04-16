@@ -37,7 +37,11 @@ public class SecurityConfig {
                         // Allow all requests to "/your-endpoint/**" without authentication
                         .requestMatchers("/api/**").permitAll()
                         // Require authentication for all other requests
-                        .anyRequest().authenticated());
+                        // This is currently commented, it will later be 
+                        // used to require authentication after the application 
+                        // works properly without it
+                        // .anyRequest().authenticated());
+                        .anyRequest().permitAll());
 
         return http.build();
     }
