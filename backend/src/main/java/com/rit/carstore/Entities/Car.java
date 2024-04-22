@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

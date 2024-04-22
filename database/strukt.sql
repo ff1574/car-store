@@ -214,4 +214,6 @@ SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = 1;
 
 SELECT manufacturer_id, HEX(manufacturer_image) AS image_hex FROM manufacturers;
 
+SELECT * FROM cars;
+
 SELECT * FROM cars WHERE manufacturer_id = 1;

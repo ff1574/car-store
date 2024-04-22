@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import ManufacturerComponent from "./components/ManufacturerComponent";
 import CarsComponent from "./components/CarsComponent";
@@ -12,7 +12,7 @@ import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail] = useState("");
   const [showSettings, setShowSettings] = useState(false); // State to toggle settings visibility
   const [appStyle, setAppStyle] = useState({
     backgroundColor: "#fff",
