@@ -8,6 +8,7 @@ function CarsComponent() {
   const [loading, setLoading] = useState(true);
   const [editCarId, setEditCarId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
+  const [carPhoto, setCarPhoto] = useState(null);
 
   const fetchCars = async () => {
     const url = manufacturerId
@@ -29,29 +30,37 @@ function CarsComponent() {
   }, [manufacturerId]);
 
   const handleAddCar = async () => {
-    const newCar = {
-      carModel: "Roadster Test",
-      carYear: new Date().getFullYear(),
-      carMileage: 100,
-      carPrice: 129000,
-      carColor: "Red",
-      carEngine: "Electric",
-      carStockQuantity: 3,
-      manufacturerId,
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+  
+      const newCar = {
+        carModel: "Roadster Test",
+        carYear: new Date().getFullYear(),
+        carMileage: 100,
+        carPrice: 129000,
+        carColor: "Red",
+        carEngine: "Electric",
+        carStockQuantity: 3,
+        carPhoto: base64String, // Send base64 encoded string
+        manufacturerId,
+      };
+  
+      try {
+        const response = await axios.post("http://localhost:8080/api/car", newCar);
+        setCars([...cars, {...response.data, carImage: `data:image/png;base64,${base64String}`}]);
+      } catch (error) {
+        console.error("Failed to add car:", error);
+      }
     };
-
-    console.log("New Car: ", newCar);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/car",
-        newCar
-      );
-      setCars([...cars, response.data]);
-    } catch (error) {
-      console.error("Failed to add car:", error);
+  
+    if (carPhoto) {
+      reader.readAsDataURL(carPhoto);
+    } else {
+      console.log("No photo to upload.");
     }
   };
+  
 
   const handleDeleteCar = async (carId) => {
     try {
@@ -71,7 +80,7 @@ function CarsComponent() {
       carColor: car.carColor,
       carEngine: car.carEngine,
       carMileage: car.carMileage,
-      carStockQuantity: car.stock,
+      carStockQuantity: car.carStockQuantity,
       manufacturerId: manufacturerId,
     });
   };
@@ -87,8 +96,13 @@ function CarsComponent() {
         ...editFormData,
         manufacturerId,
       };
-      const response = await axios.put(`http://localhost:8080/api/car/${editCarId}`, updatedCar);
-      const updatedCars = cars.map((car) => car.carId === editCarId ? response.data : car);
+      const response = await axios.put(
+        `http://localhost:8080/api/car/${editCarId}`,
+        updatedCar
+      );
+      const updatedCars = cars.map((car) =>
+        car.carId === editCarId ? response.data : car
+      );
       setCars(updatedCars);
       setEditCarId(null); // Exit edit mode
     } catch (error) {
@@ -99,12 +113,85 @@ function CarsComponent() {
   if (loading) {
     return <div>Loading cars...</div>;
   }
+  const carsListStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "20px",
+  };
 
+  const carCardStyle = {
+    cursor: "pointer",
+    textAlign: "center",
+    marginBottom: "20px",
+    padding: "20px",
+    border: "1px solid #ccc",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    borderRadius: "8px",
+  };
+
+  const carImageStyle = {
+    width: "100px",
+    height: "100px",
+    marginBottom: "10px",
+  };
+
+  const carNameStyle = {
+    fontSize: "30px",
+    fontWeight: "bold",
+    color: "#52abff", // Apply the previously used blue color
+  };
+  const editModeStyle = {
+    display: "flex",
+    flexDirection: "column", // Ensures items are stacked vertically
+    gap: "10px", // Adds space between each form control
+    width: "100%", // Ensures the flex container takes full width
+    alignItems: "flex-start", // Aligns items to the start of the flex container
+  };
+  const inputStyle = {
+    width: "100%", // Ensures input takes up the full width
+    padding: "10px", // Good padding for better text visibility
+    marginBottom: "10px", // Adds space below each input for separation
+    borderRadius: "5px", // Optionally, adds rounded corners for better aesthetics
+    border: "1px solid #ccc", // Gives a subtle border to the inputs
+  };
   return (
     <div>
-      <h2>
-        Cars {manufacturerId ? `of Manufacturer ${manufacturerId}` : "from All Manufacturers"}
+      <h2
+        style={{
+          textAlign: "center",
+          color: "#52abff",
+          fontSize: "40px",
+          margin: "40px 0",
+        }}
+      >
+        Cars{" "}
+        {manufacturerId
+          ? `of Manufacturer ${manufacturerId}`
+          : "from All Manufacturers"}
       </h2>
+
+      <button
+        onClick={handleAddCar} // This is where the handleAddCar function is bound to the button click event
+        style={{
+          display: "block",
+          margin: "20px auto",
+          padding: "10px 20px",
+          fontSize: "16px",
+          color: "#fff",
+          backgroundColor: "#52abff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Add New Car
+      </button>
+      <div style={carsListStyle}>
+        {loading ? (
+          <p>Loading cars...</p>
+        ) : (
       {cars.map((car) => (
         <div key={car.carId}>
           {editCarId === car.carId ? (

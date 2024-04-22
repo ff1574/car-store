@@ -48,7 +48,6 @@ public class CarService {
                     existingCar.setCarEngine(car.getCarEngine());
                     existingCar.setCarStockQuantity(car.getCarStockQuantity());
                     existingCar.setManufacturer(existingCar.getManufacturer()); // Assume the Manufacturer is managed correctly
-                    System.out.println("Car: " + existingCar.toString());
                     return carRepository.save(existingCar);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Car with ID " + car.getCarId() + " does not exist."));
