@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS administrators
      administrator_id       INT AUTO_INCREMENT  PRIMARY KEY,
      administrator_name     VARCHAR(255)        NOT NULL,
      administrator_email    VARCHAR(255)        NOT NULL UNIQUE,
-     administrator_password VARCHAR(255)        NOT NULL
+     administrator_password VARCHAR(60)
   );
 
 -- Inserting into Manufacturers
@@ -199,16 +199,19 @@ INSERT INTO order_details (order_id, car_id, car_quantity, car_price_per_unit) V
 
 -- Inserting into Administrators
 -- The passwords are written here so you can access any of the profiles
-INSERT INTO administrators (administrator_name, administrator_email, administrator_password) VALUES
-('Franko Fišter', 'ff1574@rit.edu', SHA2('admin', 256)),
-('Denny Lulak', 'dal4933@rit.edu', SHA2('admin', 256)),
-('Mladen Oršulić', 'mo4674@rit.edu', SHA2('admin', 256)),
-('Dorian Dražić-Karalić', 'dd9349@rit.edu', SHA2('admin', 256)),
-('Branko Mihaljević', 'bxmcada@rit.edu', SHA2('charizard', 256));
+INSERT INTO administrators (administrator_name, administrator_email) VALUES
+('Franko Fišter', 'ff1574@rit.edu'),
+('Denny Lulak', 'dal4933@rit.edu'),
+('Mladen Oršulić', 'mo4674@rit.edu'),
+('Dorian Dražić-Karalić', 'dd9349@rit.edu'),
+('Branko Mihaljević', 'bxmcada@rit.edu');
 
+SELECT * FROM administrators;
 SELECT * FROM manufacturers;
 DESCRIBE manufacturers;
 SHOW FIELDS FROM manufacturers WHERE Field = 'manufacturer_image';
 SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = 1;
 
 SELECT manufacturer_id, HEX(manufacturer_image) AS image_hex FROM manufacturers;
+
+SELECT * FROM cars WHERE manufacturer_id = 1;

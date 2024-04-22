@@ -89,4 +89,26 @@ public class AdministratorController {
         String hashedPassword = administratorService.hashPassword(password);
         return ResponseEntity.ok(hashedPassword);
     }
+
+    @PostMapping("/rehash-passwords")
+    public ResponseEntity<?> rehashAllPasswords() {
+        try {
+            administratorService.rehashPasswords();
+            return ResponseEntity.ok("Passwords rehashed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error rehashing passwords");
+        }
+    }
+
+    @PostMapping("/set-initial-passwords")
+    public ResponseEntity<?> setInitialAdminPasswords() {
+        try {
+            administratorService.setInitialAdminPasswords("admin"); // Set all passwords to "admin"
+            return ResponseEntity.ok("Initial passwords set successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to set initial passwords.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
