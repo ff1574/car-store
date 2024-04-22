@@ -26,8 +26,30 @@ public class CarService {
         return carRepository.findById(id);
     }
 
-    public Car saveCar(Car car) {
+    public Car saveNewCar(Car car) {
+        if (car.getCarId() != null) {
+            throw new IllegalArgumentException("New car must not have an ID");
+        }
         return carRepository.save(car);
+    }
+
+    public Car updateCar(Car car) {
+        if (car.getCarId() == null) {
+            throw new IllegalArgumentException("Cannot update a car without an ID");
+        }
+        return carRepository.findById(car.getCarId())
+                .map(existingCar -> {
+                    existingCar.setCarModel(car.getCarModel());
+                    existingCar.setCarYear(car.getCarYear());
+                    existingCar.setCarMileage(car.getCarMileage());
+                    existingCar.setCarPrice(car.getCarPrice());
+                    existingCar.setCarColor(car.getCarColor());
+                    existingCar.setCarEngine(car.getCarEngine());
+                    existingCar.setCarStockQuantity(car.getCarStockQuantity());
+                    existingCar.setManufacturer(car.getManufacturer()); // Assume the Manufacturer is managed correctly
+                    return carRepository.save(existingCar);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Car with ID " + car.getCarId() + " does not exist."));
     }
 
     public void deleteCar(Integer id) {

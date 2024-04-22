@@ -33,7 +33,7 @@ public class CarController {
 
     @PostMapping
     public Car createCar(@RequestBody Car car) {
-        return carService.saveCar(car);
+        return carService.saveNewCar(car);
     }
 
     @PutMapping("/{id}")
@@ -41,7 +41,7 @@ public class CarController {
         return carService.findCarById(id)
                 .map(existingCar -> {
                     car.setCarId(id);
-                    return ResponseEntity.ok(carService.saveCar(car));
+                    return ResponseEntity.ok(carService.updateCar(car));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

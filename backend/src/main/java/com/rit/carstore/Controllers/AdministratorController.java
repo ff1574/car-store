@@ -79,4 +79,14 @@ public class AdministratorController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @PostMapping("/hash-password")
+    public ResponseEntity<String> hashPassword(@RequestBody Map<String, String> passwordMap) {
+        String password = passwordMap.get("password");
+        if (password == null) {
+            return ResponseEntity.badRequest().body("Password must be provided");
+        }
+        String hashedPassword = administratorService.hashPassword(password);
+        return ResponseEntity.ok(hashedPassword);
+    }
 }

@@ -57,4 +57,8 @@ public class AdministratorService {
 
         return matches;
     }
+
+    public String hashPassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
 }

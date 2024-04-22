@@ -21,25 +21,25 @@ public class Car {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "manufacturer_id", nullable = false)
+    @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "car_model", length = 255)
     private String carModel;
 
-    @Column(nullable = false)
+    @Column(name = "car_year")
     private Integer carYear;
 
-    @Column(nullable = false)
+    @Column(name = "car_mileage")
     private Integer carMileage;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "car_price", precision = 10, scale = 2)
     private BigDecimal carPrice;
 
-    @Column(length = 50)
+    @Column(name = "car_color", length = 50)
     private String carColor;
 
-    @Column(length = 100)
+    @Column(name = "car_engine", length = 100)
     private String carEngine;
 
     private Integer carStockQuantity;
