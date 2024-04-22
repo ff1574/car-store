@@ -63,7 +63,7 @@ function Login({ onLogin }) {
         <label>Email :</label>
         <br />
         <input
-          type="email"å
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={inputStyle}

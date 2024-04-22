@@ -2,7 +2,6 @@ package com.rit.carstore.Services;
 
 import com.rit.carstore.Entities.Car;
 import com.rit.carstore.Repositories.CarRepository;
-import com.rit.carstore.Repositories.ManufacturerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,10 @@ import java.util.Optional;
 public class CarService {
 
     private final CarRepository carRepository;
-    private final ManufacturerRepository manufacturerRepository;
 
     @Autowired
-    public CarService(CarRepository carRepository, ManufacturerRepository manufacturerRepository) {
+    public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
-        this.manufacturerRepository = manufacturerRepository;
     }
 
     public List<Car> findAllCars() {
@@ -51,7 +48,6 @@ public class CarService {
                     existingCar.setCarEngine(car.getCarEngine());
                     existingCar.setCarStockQuantity(car.getCarStockQuantity());
                     existingCar.setManufacturer(existingCar.getManufacturer()); // Assume the Manufacturer is managed correctly
-                    System.out.println("Car: " + existingCar.toString());
                     return carRepository.save(existingCar);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Car with ID " + car.getCarId() + " does not exist."));

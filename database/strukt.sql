@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS cars
      car_id                 INT AUTO_INCREMENT  PRIMARY KEY,
      manufacturer_id        INT,
      car_model              VARCHAR(255)        NOT NULL,
-     car_image 				BLOB,
+     car_image 				LONGBLOB,
      car_year               YEAR,
      car_mileage			INT,
      car_price              DECIMAL(10, 2),
@@ -215,5 +215,7 @@ SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = 1;
 SELECT manufacturer_id, HEX(manufacturer_image) AS image_hex FROM manufacturers;
 
 SELECT * FROM cars;
+
+DESCRIBE cars;
 
 SELECT * FROM cars WHERE manufacturer_id = 1;
