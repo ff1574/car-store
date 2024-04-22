@@ -43,6 +43,10 @@ public class Car {
     @Column(name = "car_engine", length = 100)
     private String carEngine;
 
+    @Lob
+    @Column(name = "car_image")
+    private byte[] carImage;
+
     private Integer carStockQuantity;
 
     @OneToMany(mappedBy = "car")

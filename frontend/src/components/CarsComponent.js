@@ -121,6 +121,10 @@ function CarsComponent() {
           ) : (
             <>
               <h3>{car.carModel}</h3>
+              <img
+                src={`data:image/png;base64,${car.carImage}`}
+                alt={`${car.carModel}`}
+              />
               <p><strong>Year:</strong> {car.carYear}</p>
               <p><strong>Price:</strong> ${car.carPrice}</p>
               <p><strong>Color:</strong> {car.carColor}</p>

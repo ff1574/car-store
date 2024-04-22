@@ -2,7 +2,6 @@ package com.rit.carstore.Services;
 
 import com.rit.carstore.Entities.Car;
 import com.rit.carstore.Repositories.CarRepository;
-import com.rit.carstore.Repositories.ManufacturerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

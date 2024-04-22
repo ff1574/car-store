@@ -23,14 +23,35 @@ public class ImageToDatabase implements CommandLineRunner {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                if (child.getName().endsWith(".png")) {
-                    String fileName = child.getName();
-                    int manufacturerId = Integer.parseInt(fileName.replace("manufacturer_", "").replace(".png", ""));
-                    updateManufacturerImage(manufacturerId, child);
+                String fileName = child.getName();
+                if (fileName.endsWith(".png")) {
+                    if (fileName.startsWith("manufacturer_")) {
+                        int manufacturerId = Integer
+                                .parseInt(fileName.replace("manufacturer_", "").replace(".png", ""));
+                        updateManufacturerImage(manufacturerId, child);
+                    } else if (fileName.startsWith("car_")) {
+                        int carId = Integer.parseInt(fileName.replace("car_", "").replace(".png", ""));
+                        updateCarImage(carId, child);
+                    }
                 }
             }
         } else {
             System.out.println("No files found in the directory.");
+        }
+    }
+
+    private void updateCarImage(int carId, File imageFile) throws IOException {
+        // Check if the image needs to be updated
+        String sqlCheck = "SELECT car_image FROM cars WHERE car_id = ?";
+        byte[] existingImage = jdbcTemplate.queryForObject(sqlCheck, new Object[] { carId }, byte[].class);
+
+        if (existingImage == null || existingImage.length == 0) {
+            byte[] imageBytes = Files.readAllBytes(imageFile.toPath());
+            String sqlUpdate = "UPDATE cars SET car_image = ? WHERE car_id = ?";
+            jdbcTemplate.update(sqlUpdate, imageBytes, carId);
+            System.out.println("Updated image for car ID: " + carId);
+        } else {
+            System.out.println("Image already exists for car ID: " + carId + " - Skipping update.");
         }
     }
 
