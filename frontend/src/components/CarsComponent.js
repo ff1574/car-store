@@ -6,6 +6,8 @@ function CarsComponent() {
   const { manufacturerId } = useParams(); // Retrieve the manufacturerId from the route
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editCarId, setEditCarId] = useState(null); // To track which car is being edited
+  const [editFormData, setEditFormData] = useState({}); // Form data for the car being edit
 
   const fetchCars = async () => {
     const url = manufacturerId
@@ -29,6 +31,44 @@ function CarsComponent() {
     fetchCars();
     //eslint-disable-next-line
   }, [manufacturerId]);
+
+  const handleEditClick = (car) => {
+    setEditCarId(car.carId);
+    setEditFormData({
+      carModel: car.carModel,
+      carYear: car.carYear,
+      carPrice: car.carPrice,
+      carColor: car.carColor,
+      carEngine: car.carEngine,
+      carMileage: car.carMileage,
+      carStock: car.stock,
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({
+      ...editFormData,
+      [name]: value,
+    });
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/car/${editCarId}`,
+        editFormData
+      );
+      setCars(
+        cars.map((car) =>
+          car.carId === editCarId ? { ...car, ...editFormData } : car
+        )
+      );
+      setEditCarId(null); // Exit edit mode
+    } catch (error) {
+      console.error("Failed to update car:", error);
+    }
+  };
 
   const handleAddCar = async () => {
     const newCar = {
@@ -57,8 +97,18 @@ function CarsComponent() {
 
   const handleEditCar = async (carId, updates) => {
     try {
-      await axios.put(`http://localhost:8080/api/car/${carId}`, updates);
-      fetchCars();
+      const response = await axios.put(
+        `http://localhost:8080/api/car/${carId}`,
+        updates
+      );
+      const updatedCars = cars.map((car) => {
+        if (car.carId === carId) {
+          // Assuming the response includes the updated car data
+          return { ...car, ...response.data };
+        }
+        return car;
+      });
+      setCars(updatedCars); // Update the cars array with the modified car
     } catch (error) {
       console.error("Failed to update car:", error);
     }
@@ -87,24 +137,38 @@ function CarsComponent() {
       </h2>
       {cars.map((car) => (
         <div key={car.carId}>
-          <h3>{car.carModel}</h3>
-          <p>Year: {car.carYear}</p>
-          <button
-            onClick={() =>
-              handleEditCar(car.carId, {
-                ...car,
-                carPrice: car.carPrice + 1000,
-              })
-            }
-          >
-            Increase Price
-          </button>
-          <button onClick={() => handleDeleteCar(car.carId)}>Delete Car</button>
+          {editCarId === car.carId ? (
+            // Editable inputs
+            <>
+              <input type="text" name="carModel" value={editFormData.carModel} onChange={handleInputChange} />
+              <input type="number" name="carYear" value={editFormData.carYear} onChange={handleInputChange} />
+              <input type="number" name="carPrice" value={editFormData.carPrice} onChange={handleInputChange} />
+              <input type="text" name="carColor" value={editFormData.carColor} onChange={handleInputChange} />
+              <input type="text" name="carEngine" value={editFormData.carEngine} onChange={handleInputChange} />
+              <input type="number" name="carMileage" value={editFormData.carMileage} onChange={handleInputChange} />
+              <input type="number" name="carStock" value={editFormData.carStock} onChange={handleInputChange} />
+              <button onClick={handleSaveClick}>Save</button>
+            </>
+          ) : (
+            // Display mode
+            <>
+              <h3>{car.carModel}</h3>
+              <p><strong>Year:</strong> {car.carYear}</p>
+              <p><strong>Price:</strong> ${car.carPrice}</p>
+              <p><strong>Color:</strong> {car.carColor}</p>
+              <p><strong>Engine:</strong> {car.carEngine}</p>
+              <p><strong>Mileage:</strong> {car.carMileage} miles</p>
+              <p><strong>Stock:</strong> {car.stock}</p>
+              <button onClick={() => handleEditClick(car)}>Edit</button>
+              <button onClick={() => handleDeleteCar(car.carId)}>Delete Car</button>
+            </>
+          )}
         </div>
       ))}
       <button onClick={handleAddCar}>Add New Car</button>
     </div>
   );
 }
+
 
 export default CarsComponent;

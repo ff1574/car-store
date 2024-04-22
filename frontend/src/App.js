@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
@@ -21,14 +20,11 @@ function App() {
   });
 
   const handleLogin = (userData) => {
-    setUser(userData); // Assuming userData contains information about the user, including their role
-    // For simplicity, you might just use a flag like isAdmin for admin users
+    setUser(userData);
   };
 
-  // Optionally, handle logout
   const handleLogout = () => {
     setUser(null);
-    // Also, clear any stored authentication tokens or user data as needed
   };
 
   const handleChangeBackgroundColor = (color) => {
@@ -43,14 +39,37 @@ function App() {
     return <Login onLogin={handleLogin} />;
   }
 
-  // Corrected style prop usage
+  // Styles for user type and settings button
+  const userTypeStyle = {
+    textAlign: "center",
+    fontSize: "24px", // Larger font size
+    textTransform: "uppercase",
+    color: "#52abff", // Same blue color used in navbar
+    margin: "10px 0",
+  };
+
+  const settingsButtonStyle = {
+    padding: "10px 20px",
+    backgroundColor: "#52abff",
+    color: "white",
+    fontSize: "18px",
+    borderRadius: "5px",
+    margin: "10px 10px",
+    border: "none",
+    cursor: "pointer",
+    display: "block",
+  };
+
   return (
     <div className="App" style={appStyle}>
       <header className="App-header">
-        <h1>{user.type}</h1>
+        <h1 style={userTypeStyle}>{user.type}</h1>
         {user.type === "admin" && (
           <>
-            <button onClick={() => setShowSettings(!showSettings)}>
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              style={settingsButtonStyle}
+            >
               Settings
             </button>
             <Settings
@@ -61,21 +80,18 @@ function App() {
           </>
         )}
 
-        {user && <NavbarComponent onLogout={handleLogout} />}
+        <NavbarComponent onLogout={handleLogout} />
 
         <Routes>
           <Route path="/" element={<ManufacturerComponent />} />
-
           <Route
             path="/manufacturers/:manufacturerId"
             element={<CarsComponent />}
           />
-
           <Route
             path="/customers"
             element={<CustomersComponent email={userEmail} />}
           />
-
           <Route
             path="/orders"
             element={user.isAdmin ? <OrdersComponent /> : <Navigate to="/" />}
