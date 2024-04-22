@@ -14,12 +14,10 @@ import java.util.Optional;
 public class CarService {
 
     private final CarRepository carRepository;
-    private final ManufacturerRepository manufacturerRepository;
 
     @Autowired
-    public CarService(CarRepository carRepository, ManufacturerRepository manufacturerRepository) {
+    public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
-        this.manufacturerRepository = manufacturerRepository;
     }
 
     public List<Car> findAllCars() {
