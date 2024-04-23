@@ -30,30 +30,37 @@ function CarsComponent({ isAdmin }) {
   }, [manufacturerId]);
 
   const handleAddCar = async () => {
-    const newCar = {
-      carModel: "Roadster Test",
-      carYear: new Date().getFullYear(),
-      carMileage: 100,
-      carPrice: 129000,
-      carColor: "Red",
-      carEngine: "Electric",
-      carStockQuantity: 3,
-      manufacturerId,
-      carPhoto,
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+  
+      const newCar = {
+        carModel: "Roadster Test",
+        carYear: new Date().getFullYear(),
+        carMileage: 100,
+        carPrice: 129000,
+        carColor: "Red",
+        carEngine: "Electric",
+        carStockQuantity: 3,
+        carPhoto: base64String, // Send base64 encoded string
+        manufacturerId,
+      };
+  
+      try {
+        const response = await axios.post("http://localhost:8080/api/car", newCar);
+        setCars([...cars, {...response.data, carImage: `data:image/png;base64,${base64String}`}]);
+      } catch (error) {
+        console.error("Failed to add car:", error);
+      }
     };
-
-    console.log("New Car: ", newCar);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/car",
-        newCar
-      );
-      setCars([...cars, response.data]);
-    } catch (error) {
-      console.error("Failed to add car:", error);
+  
+    if (carPhoto) {
+      reader.readAsDataURL(carPhoto);
+    } else {
+      console.log("No photo to upload.");
     }
   };
+  
 
   const handleDeleteCar = async (carId) => {
     try {
@@ -164,133 +171,60 @@ function CarsComponent({ isAdmin }) {
           ? `of Manufacturer ${manufacturerId}`
           : "from All Manufacturers"}
       </h2>
-      {isAdmin && (
-        <button
-          onClick={handleAddCar} // This is where the handleAddCar function is bound to the button click event
-          style={{
-            display: "block",
-            margin: "20px auto",
-            padding: "10px 20px",
-            fontSize: "16px",
-            color: "#fff",
-            backgroundColor: "#52abff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Add New Car
-        </button>
-      )}
 
+      <button
+        onClick={handleAddCar} // This is where the handleAddCar function is bound to the button click event
+        style={{
+          display: "block",
+          margin: "20px auto",
+          padding: "10px 20px",
+          fontSize: "16px",
+          color: "#fff",
+          backgroundColor: "#52abff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Add New Car
+      </button>
       <div style={carsListStyle}>
         {loading ? (
           <p>Loading cars...</p>
         ) : (
-          cars.map((car) => (
-            <div key={car.carId} style={carCardStyle}>
-              {editCarId === car.carId && isAdmin ? (
-                <div style={editModeStyle}>
-                  <input
-                    type="text"
-                    name="carModel"
-                    value={editFormData.carModel}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="number"
-                    name="carYear"
-                    value={editFormData.carYear}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="number"
-                    name="carPrice"
-                    value={editFormData.carPrice}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="text"
-                    name="carColor"
-                    value={editFormData.carColor}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="text"
-                    name="carEngine"
-                    value={editFormData.carEngine}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="number"
-                    name="carMileage"
-                    value={editFormData.carMileage}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="number"
-                    name="carStockQuantity"
-                    value={editFormData.carStockQuantity}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(event) => setCarPhoto(event.target.files[0])}
-                    style={{ display: "block", margin: "10px 0" }}
-                  />
-
-                  <button onClick={handleSave}>Save</button>
-                </div>
-              ) : (
-                // Display mode
-                <>
-                  <img
-                    src={`data:image/png;base64,${car.carImage}`} // Assuming each car has a carImage property
-                    alt={`${car.carModel}`}
-                    style={carImageStyle}
-                  />
-                  <h3 style={carNameStyle}>{car.carModel}</h3>
-                  <p>
-                    <strong>Year:</strong> {car.carYear}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> ${car.carPrice}
-                  </p>
-                  <p>
-                    <strong>Color:</strong> {car.carColor}
-                  </p>
-                  <p>
-                    <strong>Engine:</strong> {car.carEngine}
-                  </p>
-                  <p>
-                    <strong>Mileage:</strong> {car.carMileage} miles
-                  </p>
-                  <p>
-                    <strong>Stock:</strong> {car.carStockQuantity}
-                  </p>
-
-                  {isAdmin && (
-                    <>
-                      <button onClick={() => handleEditCar(car)}>Edit</button>
-                      <button onClick={() => handleDeleteCar(car.carId)}>
-                        Delete Car
-                      </button>
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+      {cars.map((car) => (
+        <div key={car.carId}>
+          {editCarId === car.carId ? (
+            <>
+              <input type="text" name="carModel" value={editFormData.carModel} onChange={handleInputChange} />
+              <input type="number" name="carYear" value={editFormData.carYear} onChange={handleInputChange} />
+              <input type="number" name="carPrice" value={editFormData.carPrice} onChange={handleInputChange} />
+              <input type="text" name="carColor" value={editFormData.carColor} onChange={handleInputChange} />
+              <input type="text" name="carEngine" value={editFormData.carEngine} onChange={handleInputChange} />
+              <input type="number" name="carMileage" value={editFormData.carMileage} onChange={handleInputChange} />
+              <input type="number" name="carStockQuantity" value={editFormData.carStockQuantity} onChange={handleInputChange} />
+              <button onClick={handleSave}>Save</button>
+            </>
+          ) : (
+            <>
+              <h3>{car.carModel}</h3>
+              <img
+                src={`data:image/png;base64,${car.carImage}`}
+                alt={`${car.carModel}`}
+              />
+              <p><strong>Year:</strong> {car.carYear}</p>
+              <p><strong>Price:</strong> ${car.carPrice}</p>
+              <p><strong>Color:</strong> {car.carColor}</p>
+              <p><strong>Engine:</strong> {car.carEngine}</p>
+              <p><strong>Mileage:</strong> {car.carMileage} miles</p>
+              <p><strong>Stock:</strong> {car.carStockQuantity}</p>
+              <button onClick={() => handleEditCar(car)}>Edit</button>
+              <button onClick={() => handleDeleteCar(car.carId)}>Delete Car</button>
+            </>
+          )}
+        </div>
+      ))}
+      <button onClick={handleAddCar}>Add New Car</button>
     </div>
   );
 }
