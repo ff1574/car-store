@@ -80,21 +80,29 @@ function App() {
           </>
         )}
 
-        <NavbarComponent onLogout={handleLogout} />
+        <NavbarComponent onLogout={handleLogout} isAdmin={user.type === "admin"} />
 
         <Routes>
           <Route path="/" element={<ManufacturerComponent />} />
           <Route
             path="/manufacturers/:manufacturerId"
-            element={<CarsComponent />}
+            element={<CarsComponent isAdmin={user.type === "admin"} />}
           />
+
           <Route
             path="/customers"
-            element={<CustomersComponent email={userEmail} />}
+            element={
+              <CustomersComponent
+                email={userEmail}
+                isAdmin={user.type === "admin"}
+              />
+            }
           />
           <Route
             path="/orders"
-            element={user.isAdmin ? <OrdersComponent /> : <Navigate to="/" />}
+            element={
+              user.type === "admin" ? <OrdersComponent /> : <Navigate to="/" />
+            }
           />
         </Routes>
       </header>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-function CarsComponent() {
+function CarsComponent({ isAdmin }) {
   const { manufacturerId } = useParams();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
