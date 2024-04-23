@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-function CarsComponent() {
+function CarsComponent({ isAdmin }) {
   const { manufacturerId } = useParams();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,37 +30,30 @@ function CarsComponent() {
   }, [manufacturerId]);
 
   const handleAddCar = async () => {
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
-  
-      const newCar = {
-        carModel: "Roadster Test",
-        carYear: new Date().getFullYear(),
-        carMileage: 100,
-        carPrice: 129000,
-        carColor: "Red",
-        carEngine: "Electric",
-        carStockQuantity: 3,
-        carPhoto: base64String, // Send base64 encoded string
-        manufacturerId,
-      };
-  
-      try {
-        const response = await axios.post("http://localhost:8080/api/car", newCar);
-        setCars([...cars, {...response.data, carImage: `data:image/png;base64,${base64String}`}]);
-      } catch (error) {
-        console.error("Failed to add car:", error);
-      }
+    const newCar = {
+      carModel: "Roadster Test",
+      carYear: new Date().getFullYear(),
+      carMileage: 100,
+      carPrice: 129000,
+      carColor: "Red",
+      carEngine: "Electric",
+      carStockQuantity: 3,
+      manufacturerId,
+      carPhoto,
     };
-  
-    if (carPhoto) {
-      reader.readAsDataURL(carPhoto);
-    } else {
-      console.log("No photo to upload.");
+
+    console.log("New Car: ", newCar);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/car",
+        newCar
+      );
+      setCars([...cars, response.data]);
+    } catch (error) {
+      console.error("Failed to add car:", error);
     }
   };
-  
 
   const handleDeleteCar = async (carId) => {
     try {
@@ -171,29 +164,32 @@ function CarsComponent() {
           ? `of Manufacturer ${manufacturerId}`
           : "from All Manufacturers"}
       </h2>
-      <button
-        onClick={handleAddCar} // This is where the handleAddCar function is bound to the button click event
-        style={{
-          display: "block",
-          margin: "20px auto",
-          padding: "10px 20px",
-          fontSize: "16px",
-          color: "#fff",
-          backgroundColor: "#52abff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Add New Car
-      </button>
+      {isAdmin && (
+        <button
+          onClick={handleAddCar} // This is where the handleAddCar function is bound to the button click event
+          style={{
+            display: "block",
+            margin: "20px auto",
+            padding: "10px 20px",
+            fontSize: "16px",
+            color: "#fff",
+            backgroundColor: "#52abff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Add New Car
+        </button>
+      )}
+
       <div style={carsListStyle}>
         {loading ? (
           <p>Loading cars...</p>
         ) : (
           cars.map((car) => (
             <div key={car.carId} style={carCardStyle}>
-              {editCarId === car.carId ? (
+              {editCarId === car.carId && isAdmin ? (
                 <div style={editModeStyle}>
                   <input
                     type="text"
@@ -280,10 +276,15 @@ function CarsComponent() {
                   <p>
                     <strong>Stock:</strong> {car.carStockQuantity}
                   </p>
-                  <button onClick={() => handleEditCar(car)}>Edit</button>
-                  <button onClick={() => handleDeleteCar(car.carId)}>
-                    Delete Car
-                  </button>
+
+                  {isAdmin && (
+                    <>
+                      <button onClick={() => handleEditCar(car)}>Edit</button>
+                      <button onClick={() => handleDeleteCar(car.carId)}>
+                        Delete Car
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>
