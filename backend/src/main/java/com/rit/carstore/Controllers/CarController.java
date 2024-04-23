@@ -31,9 +31,10 @@ public class CarController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // takes manufacturer id as parameter
     @PostMapping
-    public Car createCar(@RequestBody Car car) {
-        return carService.saveNewCar(car);
+    public Car createCar(@RequestBody Car car, @RequestParam int manufacturerId) {
+        return carService.saveNewCar(car, manufacturerId);
     }
 
     @PutMapping("/{id}")

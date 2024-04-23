@@ -1,3 +1,4 @@
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -14,7 +15,7 @@ const linkStyle = {
   fontWeight: "bold", // Bold font weight
 };
 
-function NavbarComponent() {
+function NavbarComponent({ isAdmin }) {
   return (
     <Navbar expand="lg" style={navbarStyle}>
       <Container>
@@ -27,12 +28,16 @@ function NavbarComponent() {
             <Nav.Link as={Link} to="/" style={linkStyle}>
               Manufacturers
             </Nav.Link>
-            <Nav.Link as={Link} to="/orders" style={linkStyle}>
-              Orders
-            </Nav.Link>
-            <Nav.Link as={Link} to="/customers" style={linkStyle}>
-              Customer
-            </Nav.Link>
+            {isAdmin && ( // Render Orders link only if user is admin
+              <Nav.Link as={Link} to="/orders" style={linkStyle}>
+                Orders
+              </Nav.Link>
+            )}
+            {isAdmin && ( // Render Customers link only if user is admin
+              <Nav.Link as={Link} to="/customers" style={linkStyle}>
+                Customers
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
