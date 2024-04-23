@@ -43,6 +43,7 @@ public class ImageToDatabase implements CommandLineRunner {
     private void updateCarImage(int carId, File imageFile) throws IOException {
         // Check if the image needs to be updated
         String sqlCheck = "SELECT car_image FROM cars WHERE car_id = ?";
+        @SuppressWarnings("deprecation")
         byte[] existingImage = jdbcTemplate.queryForObject(sqlCheck, new Object[] { carId }, byte[].class);
 
         if (existingImage == null || existingImage.length == 0) {
@@ -58,6 +59,7 @@ public class ImageToDatabase implements CommandLineRunner {
     private void updateManufacturerImage(int manufacturerId, File imageFile) throws IOException {
         // Check if the image needs to be updated
         String sqlCheck = "SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = ?";
+        @SuppressWarnings("deprecation")
         byte[] existingImage = jdbcTemplate.queryForObject(sqlCheck, new Object[] { manufacturerId }, byte[].class);
 
         if (existingImage == null || existingImage.length == 0) {

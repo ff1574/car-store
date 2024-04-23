@@ -8,7 +8,8 @@ function CarsComponent({ isAdmin }) {
   const [loading, setLoading] = useState(true);
   const [editCarId, setEditCarId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
-  const [carPhoto, setCarPhoto] = useState(null);
+  const [carImage, setcarImage] = useState(null);
+  const formData = new FormData();
 
   const fetchCars = async () => {
     const url = manufacturerId
@@ -30,24 +31,28 @@ function CarsComponent({ isAdmin }) {
   }, [manufacturerId]);
 
   const handleAddCar = async () => {
-    const newCar = {
-      carModel: "Roadster Test",
-      carYear: new Date().getFullYear(),
-      carMileage: 100,
-      carPrice: 129000,
-      carColor: "Red",
-      carEngine: "Electric",
-      carStockQuantity: 3,
-      manufacturerId: manufacturerId,
-      carPhoto,
-    };
-  
-    console.log("New Car: ", newCar);
-  
+    formData.append("carModel", "Test Car");
+    formData.append("carYear", new Date().getFullYear());
+    formData.append("carMileage", 100);
+    formData.append("carPrice", 129000);
+    formData.append("carColor", "Red");
+    formData.append("carEngine", "Electric");
+    formData.append("carStockQuantity", 3);
+    formData.append("manufacturerId", manufacturerId);
+    if (carImage) {
+      formData.append("carImage", carImage);
+    }
+
+    console.log("formData", formData.get("carImage"));
     try {
       const response = await axios.post(
         `http://localhost:8080/api/car?manufacturerId=${manufacturerId}`,
-        newCar
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       setCars([...cars, response.data]);
     } catch (error) {
@@ -83,15 +88,27 @@ function CarsComponent({ isAdmin }) {
     setEditFormData({ ...editFormData, [name]: value });
   };
 
+  const handleImageChange = (event) => {
+    setcarImage(event.target.files[0]);
+  };
+
   const handleSave = async () => {
     try {
-      const updatedCar = {
-        ...editFormData,
-        manufacturerId,
-      };
+      const formData = new FormData();
+      formData.append("carModel", "Test Car");
+      formData.append("carYear", new Date().getFullYear());
+      formData.append("carMileage", 100);
+      formData.append("carPrice", 129000);
+      formData.append("carColor", "Red");
+      formData.append("carEngine", "Electric");
+      formData.append("carStockQuantity", 3);
+      formData.append("manufacturerId", manufacturerId);
+      if (carImage) {
+        formData.append("carImage", carImage);
+      }
       const response = await axios.put(
         `http://localhost:8080/api/car/${editCarId}`,
-        updatedCar
+        formData,
       );
       const updatedCars = cars.map((car) =>
         car.carId === editCarId ? response.data : car
@@ -243,7 +260,7 @@ function CarsComponent({ isAdmin }) {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(event) => setCarPhoto(event.target.files[0])}
+                    onChange={handleImageChange}
                     style={{ display: "block", margin: "10px 0" }}
                   />
 
