@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class Order {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Temporal(TemporalType.DATE)

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +20,12 @@ public class OrderDetail {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "car_id", nullable = false)
+    @JoinColumn(name = "car_id")
     private Car car;
 
     private Integer carQuantity;

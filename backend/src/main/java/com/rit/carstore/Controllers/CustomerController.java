@@ -1,6 +1,7 @@
 package com.rit.carstore.Controllers;
 
 import com.rit.carstore.Entities.Customer;
+import com.rit.carstore.Repositories.CustomerRepository;
 import com.rit.carstore.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,22 +16,13 @@ import java.util.Map;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
         this.customerService = customerService;
+        this.customerRepository = customerRepository;
     }
-
-    @GetMapping("/by-email")
-    public ResponseEntity<Integer> getCustomerIdByEmail(@RequestParam("email") String email) {
-        Integer customerId = customerService.findCustomerIdByEmail(email);
-        if (customerId != null) {
-            return ResponseEntity.ok(customerId);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
 
     @GetMapping
     public List<Customer> getAllCustomers() {
@@ -98,5 +90,15 @@ public class CustomerController {
         }
         String hashedPassword = customerService.hashPassword(password);
         return ResponseEntity.ok(hashedPassword);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Integer> getCustomerIdByEmail(@RequestParam("email") String email) {
+        Customer customer = customerRepository.findByCustomerEmail(email);
+        if (customer.getCustomerId() != null) {
+            return ResponseEntity.ok(customer.getCustomerId());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

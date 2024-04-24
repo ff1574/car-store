@@ -28,11 +28,6 @@ public class CustomerService {
     public Optional<Customer> findCustomerById(Integer id) {
         return customerRepository.findById(id);
     }
-    public Integer findCustomerIdByEmail(String email) {
-        Customer customer = customerRepository.findByCustomerEmail(email);
-        return customer != null ? customer.getCustomerId() : null;
-    }
-    
 
     public Customer saveCustomer(Customer customer) {
         String encodedPassword = passwordEncoder.encode(customer.getCustomerPassword());
@@ -45,18 +40,24 @@ public class CustomerService {
     }
 
     public boolean checkPassword(String email, String rawPassword) {
+        System.out.println("Attempting to find customer with email: " + email);
         Customer customer = customerRepository.findByCustomerEmail(email);
+
         if (customer == null) {
-            System.out.println("No customer found with email: " + customer);
+            System.out.println("No customer found with email: " + email);
             return false;
         }
+
+        System.out.println("Customer found. Email: " + email);
+        System.out.println("Stored hash in database for comparison: " + customer.getCustomerPassword());
+        System.out.println("Raw password provided for checking: " + rawPassword);
 
         boolean matches = passwordEncoder.matches(rawPassword, customer.getCustomerPassword());
 
         if (matches) {
             System.out.println("Password matches for email: " + email);
         } else {
-            System.out.println("Password does not match for email: " + email);
+            System.out.println("Password DOES NOT match for email: " + email);
         }
 
         return matches;
@@ -64,5 +65,17 @@ public class CustomerService {
 
     public String hashPassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
+    }
+
+    public void rehashPasswords() {
+        List<Customer> customers = findAllCustomers();
+        customers.forEach(customer -> {
+            String rawPassword = customer.getCustomerPassword(); // Assume this is the plain password for rehashing
+            if (!rawPassword.startsWith("$2a$")) { // Check if already hashed
+                String encodedPassword = passwordEncoder.encode(rawPassword);
+                customer.setCustomerPassword(encodedPassword);
+                saveCustomer(customer);
+            }
+        });
     }
 }

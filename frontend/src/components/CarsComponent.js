@@ -108,7 +108,6 @@ function CarsComponent({ isAdmin, user }) {
             "Content-Type": "multipart/form-data",
           },
         }
-        formData
       );
       const updatedCars = cars.map((car) =>
         car.carId === editCarId ? response.data : car
@@ -120,45 +119,58 @@ function CarsComponent({ isAdmin, user }) {
     }
   };
 
-
-
   const handleBuyCar = async (car) => {
     if (!user || !user.email) {
       alert("User is not logged in or email is not available.");
       return;
     }
-  
+
     try {
       // Fetch customer details based on email
-      const customerResponse = await axios.get(`http://localhost:8080/api/customer/by-email`, {
-        params: { email: user.email }
-      });
-  
-      if (customerResponse.status !== 200 || !customerResponse.data) {
+      const response = await axios.get(
+        `http://localhost:8080/api/customer/email`,
+        {
+          params: { email: user.email },
+        }
+      );
+
+      if (response.status !== 200 || !response.data) {
         alert("Failed to retrieve customer details.");
         return;
       }
-  
-      const customer = customerResponse.data; // Assuming the response contains customer details
-      const customerId = customer.customerId; // Assuming customerId is the correct field
-      const newOrder = {
+
+      const customerId = response.data;
+      const order = {
         customerId: customerId,
         orderDate: new Date().toISOString().slice(0, 10),
         orderTotal: car.carPrice,
+        orderStatus: "Completed",
       };
-  
+
+      console.log("Order to be placed:", order);
       // Place the order using the fetched customer ID
-      const orderResponse = await axios.post('http://localhost:8080/api/order', newOrder);
-      console.log('Order created:', orderResponse.data);
-      alert('Order placed successfully!');
+      const orderResponse = await axios.post(
+        "http://localhost:8080/api/order",
+        order
+      );
+      console.log("Order created:", orderResponse.data);
+
+      const orderDetails = {
+        carQuantity: 1,
+        carPricePerUnit: car.carPrice,
+      };
+
+      console.log("Order details to be placed:", orderDetails);
+
+      const orderDetailsResponse = await axios.post(
+        `http://localhost:8080/api/orderDetail?carId=${car.carId}&orderId=${orderResponse.data.orderId}`,
+        orderDetails
+      );
+      console.log("Order details created:", orderDetailsResponse.data);
     } catch (error) {
-      console.error('Failed to place order:', error);
-      alert('Failed to place order. Please check the console for more details.');
+      console.error("Failed to place order:", error);
     }
   };
-  
-  
-
 
   if (loading) {
     return <div>Loading cars...</div>;

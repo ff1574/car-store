@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -7,17 +8,37 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // userData = { type: "customer", email };
   const handleLogin = async (e) => {
     e.preventDefault();
-    let userData;
-    if (password === "admin") {
-      userData = { type: "admin", email };
-    } else if (password === "customer") {
-      userData = { type: "customer", email };
-    } else {
-      setError("Login failed. Please check your credentials.");
-      return; // Prevent further execution if credentials are wrong
+    var userData;
+    // Create an axios post fetch with the user email and password as a JSON object
+    try {
+      // Send a POST request to the login endpoint
+      const response = await axios.post("http://localhost:8080/api/login", {
+        email,
+        password,
+      });
+      if (response.status === 401) {
+        setError("Invalid email or password");
+        return;
+      }
+
+      if (response.data === "ROLE_CUSTOMER") {
+        userData = { type: "customer", email };
+      } else if (response.data === "ROLE_ADMINISTRATOR") {
+        userData = { type: "admin", email };
+      }
+
+      console.log(userData);
+
+      onLogin(userData); // Pass the correct user data to the App component
+      navigate("/");
+    } catch (error) {
+      // Handle error
+      setError(error.message);
     }
+
     onLogin(userData); // Pass the correct user data to the App component
     navigate("/");
   };
@@ -43,16 +64,16 @@ function Login({ onLogin }) {
     paddingTop: "10px",
   };
   const titleStyle = {
-    fontSize: '38px', // Font size for title
-    margin: '10px 0', // Spacing around the title
-    color: '#333' // Optional: color for the title text
+    fontSize: "38px", // Font size for title
+    margin: "10px 0", // Spacing around the title
+    color: "#333", // Optional: color for the title text
   };
 
   const subtitleStyle = {
-    fontSize: '16px', // Font size for subtitle
-    margin: '5px 0', // Tighter spacing for subtitle
-    color: '#444', // Optional: color for the subtitle text
-    paddingBottom: "20px"
+    fontSize: "16px", // Font size for subtitle
+    margin: "5px 0", // Tighter spacing for subtitle
+    color: "#444", // Optional: color for the subtitle text
+    paddingBottom: "20px",
   };
 
   return (

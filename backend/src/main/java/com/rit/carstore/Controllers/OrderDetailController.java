@@ -1,6 +1,10 @@
 package com.rit.carstore.Controllers;
 
+import com.rit.carstore.Entities.Car;
+import com.rit.carstore.Entities.Order;
 import com.rit.carstore.Entities.OrderDetail;
+import com.rit.carstore.Repositories.CarRepository;
+import com.rit.carstore.Repositories.OrderRepository;
 import com.rit.carstore.Services.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +17,14 @@ import java.util.List;
 public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
+    private final CarRepository carRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public OrderDetailController(OrderDetailService orderDetailService) {
+    public OrderDetailController(OrderDetailService orderDetailService, CarRepository carRepository, OrderRepository orderRepository) {
         this.orderDetailService = orderDetailService;
+        this.carRepository = carRepository;
+        this.orderRepository = orderRepository;
     }
 
     @GetMapping
@@ -32,7 +40,12 @@ public class OrderDetailController {
     }
     
     @PostMapping
-    public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail) {
+    public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail, @RequestParam Integer carId, @RequestParam Integer orderId) {
+        System.out.println(orderDetail.toString() + " " + carId + " " + orderId);
+        Car car = carRepository.findById(carId).get();
+        Order order = orderRepository.findById(orderId).get();
+        orderDetail.setCar(car);
+        orderDetail.setOrder(order);
         return orderDetailService.saveOrderDetail(orderDetail);
     }
 

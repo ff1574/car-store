@@ -180,8 +180,8 @@ INSERT INTO cars (manufacturer_id, car_model, car_year, car_price, car_color, ca
 
 -- Inserting into Customers
 INSERT INTO customers (customer_name, customer_email, customer_password, customer_phone) VALUES
-('John Doe', 'johndoe@example.com', SHA2('johnny', 256), '555-0101'),
-('Jane Smith', 'janesmith@example.com', SHA2('jane', 256), '555-0102');
+('John Doe', 'johndoe@example.com', 'johnny', '555-0101'),
+('Jane Smith', 'janesmith@example.com', 'dinamo', '555-0102');
 
 INSERT INTO customer_addresses (customer_id, customer_address_line1, customer_address_line2, customer_city, customer_state_or_province, customer_postal_code, customer_country) VALUES
 (1, '123 Elm Street', '', 'Springfield', 'StateName', '12345', 'USA'),
@@ -219,3 +219,7 @@ SELECT * FROM cars;
 DESCRIBE cars;
 
 SELECT * FROM cars WHERE manufacturer_id = 1;
+
+SELECT * FROM customers;
+SELECT * FROM administrators;
+
