@@ -79,6 +79,7 @@ function CarsComponent({ isAdmin, user }) {
       carEngine: car.carEngine,
       carMileage: car.carMileage,
       carStockQuantity: car.carStockQuantity,
+      carImage: carImage,
       manufacturerId: manufacturerId,
     });
   };
@@ -93,21 +94,20 @@ function CarsComponent({ isAdmin, user }) {
   };
 
   const handleSave = async () => {
+    const data = new FormData();
+    Object.keys(editFormData).forEach((key) => {
+      data.append(key, editFormData[key]);
+    });
+
     try {
-      const formData = new FormData();
-      formData.append("carModel", "Test Car");
-      formData.append("carYear", new Date().getFullYear());
-      formData.append("carMileage", 100);
-      formData.append("carPrice", 129000);
-      formData.append("carColor", "Red");
-      formData.append("carEngine", "Electric");
-      formData.append("carStockQuantity", 3);
-      formData.append("manufacturerId", manufacturerId);
-      if (carImage) {
-        formData.append("carImage", carImage);
-      }
       const response = await axios.put(
         `http://localhost:8080/api/car/${editCarId}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
         formData
       );
       const updatedCars = cars.map((car) =>
