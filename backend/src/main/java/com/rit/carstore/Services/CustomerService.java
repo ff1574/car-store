@@ -28,6 +28,11 @@ public class CustomerService {
     public Optional<Customer> findCustomerById(Integer id) {
         return customerRepository.findById(id);
     }
+    public Integer findCustomerIdByEmail(String email) {
+        Customer customer = customerRepository.findByCustomerEmail(email);
+        return customer != null ? customer.getCustomerId() : null;
+    }
+    
 
     public Customer saveCustomer(Customer customer) {
         String encodedPassword = passwordEncoder.encode(customer.getCustomerPassword());

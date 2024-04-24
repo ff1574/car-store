@@ -86,7 +86,7 @@ function App() {
           <Route path="/" element={<ManufacturerComponent />} />
           <Route
             path="/manufacturers/:manufacturerId"
-            element={<CarsComponent isAdmin={user.type === "admin"} />}
+            element={<CarsComponent isAdmin={user.type === "admin"} user={user}/>}
           />
 
           <Route

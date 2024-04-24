@@ -21,6 +21,17 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @GetMapping("/by-email")
+    public ResponseEntity<Integer> getCustomerIdByEmail(@RequestParam("email") String email) {
+        Integer customerId = customerService.findCustomerIdByEmail(email);
+        if (customerId != null) {
+            return ResponseEntity.ok(customerId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+
     @GetMapping
     public List<Customer> getAllCustomers() {
         return customerService.findAllCustomers();

@@ -30,7 +30,7 @@ public class OrderDetailController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    
     @PostMapping
     public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail) {
         return orderDetailService.saveOrderDetail(orderDetail);
