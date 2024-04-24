@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-function CarsComponent({ isAdmin }) {
+function CarsComponent({ isAdmin, user }) {
   const { manufacturerId } = useParams();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +108,7 @@ function CarsComponent({ isAdmin }) {
       }
       const response = await axios.put(
         `http://localhost:8080/api/car/${editCarId}`,
-        formData,
+        formData
       );
       const updatedCars = cars.map((car) =>
         car.carId === editCarId ? response.data : car
@@ -119,6 +119,46 @@ function CarsComponent({ isAdmin }) {
       console.error("Failed to update car:", error);
     }
   };
+
+
+
+  const handleBuyCar = async (car) => {
+    if (!user || !user.email) {
+      alert("User is not logged in or email is not available.");
+      return;
+    }
+  
+    try {
+      // Fetch customer details based on email
+      const customerResponse = await axios.get(`http://localhost:8080/api/customer/by-email`, {
+        params: { email: user.email }
+      });
+  
+      if (customerResponse.status !== 200 || !customerResponse.data) {
+        alert("Failed to retrieve customer details.");
+        return;
+      }
+  
+      const customer = customerResponse.data; // Assuming the response contains customer details
+      const customerId = customer.customerId; // Assuming customerId is the correct field
+      const newOrder = {
+        customerId: customerId,
+        orderDate: new Date().toISOString().slice(0, 10),
+        orderTotal: car.carPrice,
+      };
+  
+      // Place the order using the fetched customer ID
+      const orderResponse = await axios.post('http://localhost:8080/api/order', newOrder);
+      console.log('Order created:', orderResponse.data);
+      alert('Order placed successfully!');
+    } catch (error) {
+      console.error('Failed to place order:', error);
+      alert('Failed to place order. Please check the console for more details.');
+    }
+  };
+  
+  
+
 
   if (loading) {
     return <div>Loading cars...</div>;
@@ -293,7 +333,11 @@ function CarsComponent({ isAdmin }) {
                   <p>
                     <strong>Stock:</strong> {car.carStockQuantity}
                   </p>
-
+                  {!isAdmin && (
+                    <>
+                      <button onClick={() => handleBuyCar(car)}>Buy</button>
+                    </>
+                  )}
                   {isAdmin && (
                     <>
                       <button onClick={() => handleEditCar(car)}>Edit</button>
