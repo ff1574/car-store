@@ -7,6 +7,8 @@ import CustomersComponent from "./components/CustomersComponent";
 import OrdersComponent from "./components/OrdersComponent";
 import NavbarComponent from "./components/NavbarComponent";
 import Settings from "./components/Settings"; // Import Settings component
+import MyOrdersComponent from "./components/MyOrdersComponent"; // Import MyOrdersComponent
+
 
 import "./App.css";
 
@@ -51,6 +53,7 @@ function App() {
   const settingsButtonStyle = {
     padding: "10px 20px",
     backgroundColor: "#52abff",
+   
     color: "white",
     fontSize: "18px",
     borderRadius: "5px",
@@ -66,12 +69,7 @@ function App() {
         <h1 style={userTypeStyle}>{user.type}</h1>
         {user.type === "admin" && (
           <>
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              style={settingsButtonStyle}
-            >
-              Settings
-            </button>
+            
             <Settings
               show={showSettings}
               onBackgroundChange={handleChangeBackgroundColor}
@@ -84,30 +82,13 @@ function App() {
 
         <Routes>
           <Route path="/" element={<ManufacturerComponent />} />
-          <Route
-            path="/manufacturers/:manufacturerId"
-            element={<CarsComponent isAdmin={user.type === "admin"} user={user}/>}
-          />
-
-          <Route
-            path="/customers"
-            element={
-              <CustomersComponent
-                email={userEmail}
-                isAdmin={user.type === "admin"}
-              />
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              user.type === "admin" ? <OrdersComponent /> : <Navigate to="/" />
-            }
-          />
+          <Route path="/manufacturers/:manufacturerId" element={<CarsComponent isAdmin={user.type === "admin"} user={user}/>} />
+          <Route path="/customers" element={<CustomersComponent email={userEmail} isAdmin={user.type === "admin"} />} />
+          <Route path="/orders" element={user.type === "admin" ? <OrdersComponent /> : <Navigate to="/" />} />
+          <Route path="/myOrders" element={<MyOrdersComponent user={user} />} /> {/* Route for MyOrdersComponent */}
         </Routes>
       </header>
     </div>
   );
 }
-
 export default App;
