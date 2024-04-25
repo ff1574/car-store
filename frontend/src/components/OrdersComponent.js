@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function OrdersComponent() {
   const [orders, setOrders] = useState([]);
@@ -9,8 +9,8 @@ function OrdersComponent() {
       try {
         // Fetch both orders and orderDetails concurrently
         const [ordersRes, orderDetailsRes] = await Promise.all([
-          axios.get('http://localhost:8080/api/order'),
-          axios.get('http://localhost:8080/api/orderDetail'),
+          axios.get("http://localhost:8080/api/order"),
+          axios.get("http://localhost:8080/api/orderDetail"),
         ]);
 
         const ordersData = ordersRes.data;
@@ -18,11 +18,13 @@ function OrdersComponent() {
 
         // Assume orderDetailsData includes an implicit/explicit match to orders (e.g., via orderId)
         // Here we merge details into their respective orders
-        const mergedData = ordersData.map(order => ({
+        const mergedData = ordersData.map((order) => ({
           ...order,
           // Find and integrate orderDetails into this order
           // This assumes there's a direct or inferable match between order IDs and orderDetail IDs
-          orderDetails: orderDetailsData.filter(detail => detail.orderDetailId === order.orderId),
+          orderDetails: orderDetailsData.filter(
+            (detail) => detail.orderDetailId === order.orderId
+          ),
         }));
 
         setOrders(mergedData);
@@ -45,17 +47,23 @@ function OrdersComponent() {
               <li>Order Date: {order.orderDate}</li>
               <li>Order Total: ${order.orderTotal.toLocaleString()}</li>
               {order.orderDetails && order.orderDetails.length > 0 ? (
-                order.orderDetails.map(detail => (
+                order.orderDetails.map((detail) => (
                   <ul key={detail.orderDetailId}>
                     <li>Car Quantity: {detail.carQuantity}</li>
-                    <li>Price Per Unit: ${detail.carPricePerUnit.toLocaleString()}</li>
+                    <li>
+                      Price Per Unit: ${detail.carPricePerUnit.toLocaleString()}
+                    </li>
                   </ul>
                 ))
-              ) : <li>No detailed information available.</li>}
+              ) : (
+                <li>No detailed information available.</li>
+              )}
             </ul>
           </div>
         ))
-      ) : <p>Loading orders...</p>}
+      ) : (
+        <p>Loading orders...</p>
+      )}
     </div>
   );
 }

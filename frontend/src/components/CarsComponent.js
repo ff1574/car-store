@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 function CarsComponent({ isAdmin, user }) {
   const { manufacturerId } = useParams();
+  const [manufacturer, setManufacturer] = useState([]);
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editCarId, setEditCarId] = useState(null);
@@ -12,11 +13,10 @@ function CarsComponent({ isAdmin, user }) {
   const formData = new FormData();
 
   const fetchCars = async () => {
-    const url = manufacturerId
-      ? `http://localhost:8080/api/manufacturer/${manufacturerId}`
-      : "http://localhost:8080/api/car";
+    const url = `http://localhost:8080/api/manufacturer/${manufacturerId}`;
     try {
       const response = await axios.get(url);
+      setManufacturer(response.data);
       setCars(manufacturerId ? response.data.cars || [] : response.data || []);
     } catch (error) {
       console.error("Failed to fetch cars:", error);
@@ -230,7 +230,7 @@ function CarsComponent({ isAdmin, user }) {
       >
         Cars{" "}
         {manufacturerId
-          ? `of Manufacturer ${manufacturerId}`
+          ? `of ${manufacturer.manufacturerName}`
           : "from All Manufacturers"}
       </h2>
       {isAdmin && (

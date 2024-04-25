@@ -33,6 +33,11 @@ function NavbarComponent({ isAdmin }) {
                 Orders
               </Nav.Link>
             )}
+            {!isAdmin && ( // Render Orders link only if user is admin
+              <Nav.Link as={Link} to="/myOrders" style={linkStyle}>
+                MyOrders
+              </Nav.Link>
+            )}
             {isAdmin && ( // Render Customers link only if user is admin
               <Nav.Link as={Link} to="/customers" style={linkStyle}>
                 Customers
