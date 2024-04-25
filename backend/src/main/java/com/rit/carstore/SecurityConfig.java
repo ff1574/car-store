@@ -13,10 +13,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+// This class is a configuration class for Spring Security.
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // This method configures the security filter chain.
+    // It sets up CORS, disables CSRF (as this is an API), sets the session to be
+    // stateless, and configures the authorization rules.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -34,18 +38,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Allow all requests to "/auth/**" without authentication
                         .requestMatchers("/auth/**").permitAll()
-                        // Allow all requests to "/your-endpoint/**" without authentication
+                        // Allow all requests to "/api/**" without authentication
                         .requestMatchers("/api/**").permitAll()
                         // Require authentication for all other requests
-                        // This is currently commented, it will later be 
-                        // used to require authentication after the application 
-                        // works properly without it
+                        // This is currently commented, it will later be used to require authentication
+                        // after the application works properly without it
                         // .anyRequest().authenticated());
                         .anyRequest().permitAll());
 
         return http.build();
     }
 
+    // This method configures CORS.
+    // It allows requests from "http://localhost:3000", allows all HTTP methods,
+    // allows all headers, and allows credentials.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -58,6 +64,8 @@ public class SecurityConfig {
         return source;
     }
 
+    // This method provides a BCryptPasswordEncoder bean.
+    // This can be used wherever a password encoder is needed in the application.
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

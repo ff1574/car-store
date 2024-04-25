@@ -9,7 +9,9 @@ CREATE TABLE IF NOT EXISTS manufacturers
      manufacturer_name      VARCHAR(255)        NOT NULL,
      manufacturer_image		BLOB,
      manufacturer_country   VARCHAR(100),
-     manufacturer_website   VARCHAR(255)
+     manufacturer_website   VARCHAR(255),
+     created_date			DATETIME,
+     last_modified_date		DATETIME
   );
 
 DROP TABLE IF EXISTS cars;
@@ -25,6 +27,8 @@ CREATE TABLE IF NOT EXISTS cars
      car_color              VARCHAR(50),
      car_engine             VARCHAR(100),
      car_stock_quantity     INT,
+     created_date			DATETIME,
+     last_modified_date		DATETIME,
 
      FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(manufacturer_id)
         ON DELETE CASCADE ON UPDATE CASCADE
@@ -37,7 +41,9 @@ CREATE TABLE IF NOT EXISTS customers
      customer_name          VARCHAR(255)        NOT NULL,
      customer_email         VARCHAR(255)		UNIQUE,
      customer_password 		VARCHAR(255)        NOT NULL,
-     customer_phone         VARCHAR(50)
+     customer_phone         VARCHAR(50),
+     created_date			DATETIME,
+     last_modified_date		DATETIME
   );
   
 DROP TABLE IF EXISTS customer_adresses;
@@ -51,6 +57,8 @@ CREATE TABLE IF NOT EXISTS customer_addresses
     customer_state_or_province    	VARCHAR(100),
     customer_postal_code          	VARCHAR(20),
     customer_country              	VARCHAR(100) NOT NULL,
+	created_date						DATETIME,
+	last_modified_date				DATETIME,
     
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
         ON DELETE CASCADE ON UPDATE CASCADE
@@ -64,6 +72,8 @@ CREATE TABLE IF NOT EXISTS orders
      order_date             DATE,
      order_total            DECIMAL(10, 2)      NULL,
      order_status			ENUM('Completed', 'In Progress', 'Cancelled'),
+     created_date			DATETIME,
+     last_modified_date		DATETIME,
 
      FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
         ON DELETE CASCADE ON UPDATE CASCADE
@@ -77,6 +87,8 @@ CREATE TABLE IF NOT EXISTS order_details
      car_id                 INT,
      car_quantity           INT,
      car_price_per_unit     DECIMAL(10, 2),
+     created_date			DATETIME,
+     last_modified_date		DATETIME,
 
      FOREIGN KEY (order_id) REFERENCES orders(order_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -90,7 +102,9 @@ CREATE TABLE IF NOT EXISTS administrators
      administrator_id       INT AUTO_INCREMENT  PRIMARY KEY,
      administrator_name     VARCHAR(255)        NOT NULL,
      administrator_email    VARCHAR(255)        NOT NULL UNIQUE,
-     administrator_password VARCHAR(60)
+     administrator_password VARCHAR(60),
+     created_date			DATETIME,
+     last_modified_date		DATETIME
   );
 
 -- Inserting into Manufacturers
@@ -222,4 +236,7 @@ SELECT * FROM cars WHERE manufacturer_id = 1;
 
 SELECT * FROM customers;
 SELECT * FROM administrators;
+
+SELECT * FROM orders;
+SELECT * FROM order_details;
 

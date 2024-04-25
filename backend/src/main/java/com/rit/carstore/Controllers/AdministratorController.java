@@ -10,22 +10,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+// This is a REST controller for managing administrators in the system.
 @RestController
 @RequestMapping("/api/administrator")
 public class AdministratorController {
 
+    // Service class for handling business logic related to administrators.
     private final AdministratorService administratorService;
 
+    // Dependency injection of the administrator service.
     @Autowired
     public AdministratorController(AdministratorService administratorService) {
         this.administratorService = administratorService;
     }
 
+    // Endpoint for getting all administrators.
     @GetMapping
     public List<Administrator> getAllAdministrators() {
         return administratorService.findAllAdministrators();
     }
 
+    // Endpoint for getting an administrator by their ID.
     @GetMapping("/{id}")
     public ResponseEntity<Administrator> getAdministratorById(@PathVariable Integer id) {
         return administratorService.findAdministratorById(id)
@@ -33,11 +38,13 @@ public class AdministratorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for creating a new administrator.
     @PostMapping
     public Administrator createAdministrator(@RequestBody Administrator administrator) {
         return administratorService.saveAdministrator(administrator);
     }
 
+    // Endpoint for updating an existing administrator.
     @PutMapping("/{id}")
     public ResponseEntity<Administrator> updateAdministrator(@PathVariable Integer id,
             @RequestBody Administrator administrator) {
@@ -49,6 +56,7 @@ public class AdministratorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for deleting an administrator.
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdministrator(@PathVariable Integer id) {
         return administratorService.findAdministratorById(id)
@@ -59,6 +67,7 @@ public class AdministratorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for checking if a password is correct for a given email.
     @PostMapping("/check-password")
     public ResponseEntity<?> checkPassword(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
@@ -80,6 +89,7 @@ public class AdministratorController {
         }
     }
 
+    // Endpoint for hashing a password.
     @PostMapping("/hash-password")
     public ResponseEntity<String> hashPassword(@RequestBody Map<String, String> passwordMap) {
         String password = passwordMap.get("password");
@@ -90,6 +100,7 @@ public class AdministratorController {
         return ResponseEntity.ok(hashedPassword);
     }
 
+    // Endpoint for rehashing all passwords in the system.
     @PostMapping("/rehash-passwords")
     public ResponseEntity<?> rehashAllPasswords() {
         try {
@@ -101,6 +112,7 @@ public class AdministratorController {
         }
     }
 
+    // Endpoint for setting initial passwords for all administrators.
     @PostMapping("/set-initial-passwords")
     public ResponseEntity<?> setInitialAdminPasswords() {
         try {

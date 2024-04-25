@@ -11,26 +11,35 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+// This is a service class for managing cars in the system.
 @Service
 public class CarService {
 
+    // The repository for performing database operations on cars.
     private final CarRepository carRepository;
+
+    // The repository for performing database operations on manufacturers.
     private final ManufacturerRepository manufacturerRepository;
 
+    // Constructor injection of the repositories.
     @Autowired
     public CarService(CarRepository carRepository, ManufacturerRepository manufacturerRepository) {
         this.carRepository = carRepository;
         this.manufacturerRepository = manufacturerRepository;
     }
 
+    // Method to find all cars.
     public List<Car> findAllCars() {
         return carRepository.findAll();
     }
 
+    // Method to find a car by its ID.
     public Optional<Car> findCarById(Integer id) {
         return carRepository.findById(id);
     }
 
+    // Method to save a new car. The car must not have an ID and the manufacturer
+    // must exist.
     public Car saveNewCar(Car car, int manufacturerId) {
         if (car.getCarId() != null) {
             throw new IllegalArgumentException("New car must not have an ID");
@@ -43,6 +52,7 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    // Method to update a car. The car must have an ID and exist in the database.
     public Car updateCar(Car car) {
         if (car.getCarId() == null) {
             throw new IllegalArgumentException("Cannot update a car without an ID");
@@ -56,12 +66,14 @@ public class CarService {
                     existingCar.setCarColor(car.getCarColor());
                     existingCar.setCarEngine(car.getCarEngine());
                     existingCar.setCarStockQuantity(car.getCarStockQuantity());
-                    existingCar.setManufacturer(existingCar.getManufacturer()); // Assume the Manufacturer is managed correctly
+                    existingCar.setManufacturer(existingCar.getManufacturer()); // Assume the Manufacturer is managed
+                                                                                // correctly
                     return carRepository.save(existingCar);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Car with ID " + car.getCarId() + " does not exist."));
     }
 
+    // Method to delete a car by its ID.
     public void deleteCar(Integer id) {
         carRepository.deleteById(id);
     }

@@ -11,24 +11,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+// This is a REST controller for managing customers in the system.
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
 
+    // Service class for handling business logic related to customers.
     private final CustomerService customerService;
+    // Repository class for accessing the database for customer-related operations.
     private final CustomerRepository customerRepository;
 
+    // Dependency injection of the customer service and repository.
     @Autowired
     public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
         this.customerService = customerService;
         this.customerRepository = customerRepository;
     }
 
+    // Endpoint for getting all customers.
     @GetMapping
     public List<Customer> getAllCustomers() {
         return customerService.findAllCustomers();
     }
 
+    // Endpoint for getting a customer by their ID.
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
         return customerService.findCustomerById(id)
@@ -36,11 +42,13 @@ public class CustomerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for creating a new customer.
     @PostMapping
     public Customer createCustomer(@RequestBody Customer customer) {
         return customerService.saveCustomer(customer);
     }
 
+    // Endpoint for updating an existing customer.
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
         return customerService.findCustomerById(id)
@@ -51,6 +59,7 @@ public class CustomerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for deleting a customer.
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable Integer id) {
         return customerService.findCustomerById(id)
@@ -61,6 +70,7 @@ public class CustomerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Endpoint for checking if a password is correct for a given email.
     @PostMapping("/check-password")
     public ResponseEntity<?> checkPassword(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
@@ -82,6 +92,7 @@ public class CustomerController {
         }
     }
 
+    // Endpoint for hashing a password.
     @PostMapping("/hash-password")
     public ResponseEntity<String> hashPassword(@RequestBody Map<String, String> passwordMap) {
         String password = passwordMap.get("password");
@@ -92,6 +103,7 @@ public class CustomerController {
         return ResponseEntity.ok(hashedPassword);
     }
 
+    // Endpoint for getting a customer's ID by their email.
     @GetMapping("/email")
     public ResponseEntity<Integer> getCustomerIdByEmail(@RequestParam("email") String email) {
         Customer customer = customerRepository.findByCustomerEmail(email);

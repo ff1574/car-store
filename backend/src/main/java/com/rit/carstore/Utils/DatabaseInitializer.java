@@ -12,13 +12,21 @@ import com.rit.carstore.Entities.Customer;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+// This class initializes the database when the application starts.
+// It implements CommandLineRunner, which means it will run after the application context is loaded.
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
+    // The repository for performing database operations on administrators.
     private final AdministratorRepository administratorRepository;
+
+    // The repository for performing database operations on customers.
     private final CustomerRepository customerRepository;
+
+    // The password encoder for encoding passwords.
     private final BCryptPasswordEncoder passwordEncoder;
 
+    // Constructor injection of the repositories and password encoder.
     @Autowired
     public DatabaseInitializer(AdministratorRepository administratorRepository, BCryptPasswordEncoder passwordEncoder,
             AdministratorService administratorService, CustomerService customerService,
@@ -28,6 +36,9 @@ public class DatabaseInitializer implements CommandLineRunner {
         this.customerRepository = customerRepository;
     }
 
+    // This method is run after the application context is loaded.
+    // It checks if any administrators or customers need their passwords set or
+    // encoded, and performs these operations if necessary.
     @Override
     public void run(String... args) throws Exception {
         Iterable<Administrator> admins = administratorRepository.findAll();

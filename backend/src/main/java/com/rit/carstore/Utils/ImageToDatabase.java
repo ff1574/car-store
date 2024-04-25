@@ -9,14 +9,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+// This class implements CommandLineRunner, which means it will run after the application context is loaded.
+// It is used to update the images for cars and manufacturers in the database.
 @Component
 public class ImageToDatabase implements CommandLineRunner {
 
+    // The path to the directory containing the images.
     private static final String DIRECTORY_PATH = "backend/src/main/java/com/rit/carstore/Utils/misc_utils";
 
+    // The JdbcTemplate is used to execute SQL queries.
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // This method is run after the application context is loaded.
+    // It reads the images from the directory and updates the images in the
+    // database.
     @Override
     public void run(String... args) throws Exception {
         File dir = new File(DIRECTORY_PATH);
@@ -40,8 +47,10 @@ public class ImageToDatabase implements CommandLineRunner {
         }
     }
 
+    // This method updates the image for a car in the database.
+    // It first checks if the image needs to be updated. If the image does not exist
+    // or is empty, it updates the image.
     private void updateCarImage(int carId, File imageFile) throws IOException {
-        // Check if the image needs to be updated
         String sqlCheck = "SELECT car_image FROM cars WHERE car_id = ?";
         @SuppressWarnings("deprecation")
         byte[] existingImage = jdbcTemplate.queryForObject(sqlCheck, new Object[] { carId }, byte[].class);
@@ -56,8 +65,10 @@ public class ImageToDatabase implements CommandLineRunner {
         }
     }
 
+    // This method updates the image for a manufacturer in the database.
+    // It first checks if the image needs to be updated. If the image does not exist
+    // or is empty, it updates the image.
     private void updateManufacturerImage(int manufacturerId, File imageFile) throws IOException {
-        // Check if the image needs to be updated
         String sqlCheck = "SELECT manufacturer_image FROM manufacturers WHERE manufacturer_id = ?";
         @SuppressWarnings("deprecation")
         byte[] existingImage = jdbcTemplate.queryForObject(sqlCheck, new Object[] { manufacturerId }, byte[].class);
