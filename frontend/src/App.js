@@ -6,7 +6,6 @@ import CarsComponent from "./components/CarsComponent";
 import CustomersComponent from "./components/CustomersComponent";
 import OrdersComponent from "./components/OrdersComponent";
 import NavbarComponent from "./components/NavbarComponent";
-import Settings from "./components/Settings"; // Import Settings component
 import MyOrdersComponent from "./components/MyOrdersComponent"; // Import MyOrdersComponent
 
 
@@ -15,8 +14,7 @@ import "./App.css";
 function App() {
   const [user, setUser] = useState(null);
   const [userEmail] = useState("");
-  const [showSettings, setShowSettings] = useState(false); // State to toggle settings visibility
-  const [appStyle, setAppStyle] = useState({
+  const [appStyle] = useState({
     backgroundColor: "#fff",
     fontSize: "16px",
   });
@@ -27,14 +25,6 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-  };
-
-  const handleChangeBackgroundColor = (color) => {
-    setAppStyle((prevStyle) => ({ ...prevStyle, backgroundColor: color }));
-  };
-
-  const handleChangeFontSize = (size) => {
-    setAppStyle((prevStyle) => ({ ...prevStyle, fontSize: size }));
   };
 
   if (!user) {
@@ -50,33 +40,10 @@ function App() {
     margin: "10px 0",
   };
 
-  const settingsButtonStyle = {
-    padding: "10px 20px",
-    backgroundColor: "#52abff",
-   
-    color: "white",
-    fontSize: "18px",
-    borderRadius: "5px",
-    margin: "10px 10px",
-    border: "none",
-    cursor: "pointer",
-    display: "block",
-  };
-
   return (
     <div className="App" style={appStyle}>
       <header className="App-header">
         <h1 style={userTypeStyle}>{user.type}</h1>
-        {user.type === "admin" && (
-          <>
-            
-            <Settings
-              show={showSettings}
-              onBackgroundChange={handleChangeBackgroundColor}
-              onFontSizeChange={handleChangeFontSize}
-            />
-          </>
-        )}
 
         <NavbarComponent onLogout={handleLogout} isAdmin={user.type === "admin"} />
 
